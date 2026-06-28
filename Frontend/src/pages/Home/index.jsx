@@ -1,3 +1,17 @@
+import Hero from "./components/Hero";
+import Categories from "./components/Categories";
+import FeaturedRestaurants from "./components/FeaturedRestaurants";
+import MapPreview from "./components/MapPreview";
+import WhyChooseUs from "./components/WhyChooseUs";
+
 export default function Home() {
-    return <h1>Home Page 🍽️</h1>;
-  }
+  return (
+    <>
+      <Hero />
+      <Categories />
+      <FeaturedRestaurants />
+      <MapPreview />
+      <WhyChooseUs />
+    </>
+  );
+}
