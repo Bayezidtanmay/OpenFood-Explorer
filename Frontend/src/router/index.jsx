@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import MainLayout from "../layouts/MainLayout";
+
 import Home from "../pages/Home";
 import Search from "../pages/Search";
 import RestaurantDetails from "../pages/RestaurantDetails";
@@ -14,39 +16,45 @@ import NotFound from "../pages/NotFound";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/search",
-    element: <Search />,
-  },
-  {
-    path: "/restaurant/:id",
-    element: <RestaurantDetails />,
-  },
-  {
-    path: "/favorites",
-    element: <Favorites />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/about",
-    element: <About />,
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "search",
+        element: <Search />,
+      },
+      {
+        path: "restaurant/:id",
+        element: <RestaurantDetails />,
+      },
+      {
+        path: "favorites",
+        element: <Favorites />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
+    ],
   },
   {
     path: "*",
