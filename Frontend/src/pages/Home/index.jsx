@@ -5,9 +5,19 @@ import MapPreview from "./components/MapPreview";
 import WhyChooseUs from "./components/WhyChooseUs";
 
 import useRestaurantQuery from "../../hooks/useRestaurantQuery";
+import useRestaurants from "../../hooks/useRestaurants";
 
 export default function Home() {
   const { query, updateCategory } = useRestaurantQuery();
+
+  const {
+    restaurants,
+    loading,
+    error,
+  } = useRestaurants({
+    category: query.category,
+    search: query.search,
+  });
 
   return (
     <>
@@ -15,9 +25,16 @@ export default function Home() {
 
       <Categories onSelectCategory={updateCategory} />
 
-      <FeaturedRestaurants category={query.category} />
+      <FeaturedRestaurants
+  restaurants={restaurants}
+  loading={loading}
+/>
 
-      <MapPreview category={query.category} />
+      <MapPreview
+        restaurants={restaurants}
+        loading={loading}
+        error={error}
+      />
 
       <WhyChooseUs />
     </>

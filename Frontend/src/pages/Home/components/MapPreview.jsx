@@ -1,39 +1,13 @@
-import { useEffect, useState } from "react";
 import Section from "../../../components/ui/Section";
 import Container from "../../../components/ui/Container";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { fetchRestaurants } from "../../../services/restaurantService";
 
-export default function MapPreview({ category = null, search = "" }) {
-  const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const data = await fetchRestaurants({
-          category,
-          search,
-        });
-
-        setRestaurants(data || []);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load restaurants");
-        setRestaurants([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, [category, search]);
-
+export default function MapPreview({
+  restaurants = [],
+  loading = false,
+  error = null,
+}) {
   return (
     <Section className="bg-slate-50">
       <Container>
@@ -41,30 +15,30 @@ export default function MapPreview({ category = null, search = "" }) {
           Explore on Map
         </h2>
 
-        {/* LOADING */}
+        {/* Loading */}
         {loading && (
           <div className="h-[400px] flex items-center justify-center bg-white rounded-2xl border">
             <p className="text-slate-500">Loading restaurants...</p>
           </div>
         )}
 
-        {/* ERROR */}
+        {/* Error */}
         {!loading && error && (
           <div className="h-[400px] flex items-center justify-center bg-red-50 rounded-2xl border border-red-200">
             <p className="text-red-600">{error}</p>
           </div>
         )}
 
-        {/* EMPTY */}
+        {/* Empty */}
         {!loading && !error && restaurants.length === 0 && (
           <div className="h-[400px] flex items-center justify-center bg-white rounded-2xl border">
             <p className="text-slate-500">
-              No restaurants found in this area
+              No restaurants found in this area.
             </p>
           </div>
         )}
 
-        {/* MAP */}
+        {/* Map */}
         {!loading && !error && restaurants.length > 0 && (
           <div className="h-[400px] rounded-2xl overflow-hidden border shadow-sm">
             <MapContainer
@@ -74,23 +48,25 @@ export default function MapPreview({ category = null, search = "" }) {
               ]}
               zoom={13}
               className="h-full w-full"
-              key={`${category}-${search}`} // forces clean re-render on filter change
             >
               <TileLayer
                 attribution="&copy; OpenStreetMap contributors"
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
 
-              {restaurants.map((r) => {
-                if (!r.lat || !r.lng) return null;
+              {restaurants.map((restaurant) => {
+                if (!restaurant.lat || !restaurant.lng) return null;
 
                 return (
-                  <Marker key={r.id} position={[r.lat, r.lng]}>
+                  <Marker
+                    key={restaurant.id}
+                    position={[restaurant.lat, restaurant.lng]}
+                  >
                     <Popup>
-                      <div className="space-y-1">
-                        <h3 className="font-semibold">{r.name}</h3>
+                      <div>
+                        <h3 className="font-semibold">{restaurant.name}</h3>
                         <p className="text-sm text-gray-600">
-                          {r.cuisine}
+                          {restaurant.cuisine}
                         </p>
                       </div>
                     </Popup>
