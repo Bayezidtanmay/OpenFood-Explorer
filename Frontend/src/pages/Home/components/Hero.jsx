@@ -2,8 +2,21 @@ import Container from "../../../components/ui/Container";
 import Section from "../../../components/ui/Section";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
+import { useState } from "react";
 
-export default function Hero() {
+export default function Hero({ onSearch }) {
+  const [value, setValue] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(value);
+  };
+
+  const handleQuickSearch = (item) => {
+    setValue(item);
+    onSearch(item);
+  };
+
   return (
     <Section className="bg-gradient-to-b from-orange-50 to-white">
       <Container>
@@ -20,15 +33,20 @@ export default function Hero() {
           </p>
 
           {/* Search Box */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+          <form
+            onSubmit={handleSubmit}
+            className="mt-8 flex flex-col sm:flex-row gap-3"
+          >
             <Input
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
               placeholder="Search restaurants, cuisine, or location..."
             />
 
-            <Button className="sm:w-auto w-full">
+            <Button className="sm:w-auto w-full" type="submit">
               Search
             </Button>
-          </div>
+          </form>
 
           {/* Quick tags */}
           <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -36,7 +54,8 @@ export default function Hero() {
               (item) => (
                 <span
                   key={item}
-                  className="px-3 py-1 bg-white border rounded-full text-sm text-slate-600"
+                  onClick={() => handleQuickSearch(item)}
+                  className="cursor-pointer px-3 py-1 bg-white border rounded-full text-sm text-slate-600 hover:bg-slate-100 transition"
                 >
                   {item}
                 </span>
